@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    .btn {
+      margin: 50px;
+      padding: 15px 30px;
+      background-color: #6060ff;
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <div>&nbsp;</div>
+  <div>
+    <button class="btn">CLICK ME</button>
+  </div>
+  <script>
+    const btn = document.getElementsByClassName('btn')[0];
+    btn.addEventListener('click', () => {
+      const ani = new Animation('60px', '60px');
+      ani.animate();
+    }, false);
+
+    class Animation {
+
+      state = 0;
+
+      constructor(top, left) {
+        this.top = top;
+        this.left = left;
+      }
+
+      createCanvas() {
+        const cvs = document.createElement('canvas');
+        cvs.style.top = this.top;
+        cvs.style.left = this.left;
+        cvs.style.width = '200px';
+        cvs.style.height = '100px';
+        cvs.style.position = 'absolute';
+        cvs.style.zIndex = 99999;
+        document.body.appendChild(cvs);
+        this.cvs = cvs;
+      }
+
+      animate() {
+        this.createCanvas();
+        setInterval(() => {
+          this.draw();
+        }, 20);
+      }
+
+      draw() {
+        console.log('draw');
+        const ctx = this.cvs.getContext('2d');
+        ctx.clearRect(0, 0, 200, 100);
+        ctx.fillStyle = `rgba(100, 40, 40, 0.3)`;
+        const data = this.getDrawRectParams(this.state);
+        ctx.beginPath();
+        ctx.moveTo(data[0], data[1]);
+        ctx.lineTo(data[0] + data[2], data[1]);
+        ctx.lineTo(data[0] + data[2], data[1] + data[3]);
+        ctx.closePath();
+        ctx.fill();
+        this.state++;
+      }
+
+      getDrawRectParams(state) {
+        return [state, state, 20 + state, 20 + 0.5 * state];
+      }
+    }
+  </script>
+</body>
+
+</html>
